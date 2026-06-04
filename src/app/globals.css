@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-green: #2a9d49;
+  --color-brand-green-hover: #1f7737;
+  --color-brand-blue: #0096c7;
+  --color-brand-blue-hover: #0077b6;
+  --color-brand-navy: #0b2a4a;
+  --color-brand-navy-hover: #081e35;
+  --color-brand-gold: #d97706;
+
+  --font-primary: var(--font-inter);
+  --font-display: var(--font-outfit);
+
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-slate-700 bg-white font-primary min-h-screen flex flex-col antialiased;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-brand-navy font-bold;
+  }
+}
+
+/* Custom utility classes */
+@utility glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(11, 42, 74, 0.06);
+}
+
+@utility glass-navbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+}
+
+@utility parallax-container {
+  position: relative;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @media (max-width: 768px) {
+    background-attachment: scroll;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(11, 42, 74, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(11, 42, 74, 0.4);
+}
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* High Contrast Mode overrides */
+html.high-contrast,
+html.high-contrast body,
+html.high-contrast div,
+html.high-contrast section,
+html.high-contrast main,
+html.high-contrast nav,
+html.high-contrast header,
+html.high-contrast footer {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  background-image: none !important;
+}
+
+html.high-contrast h1,
+html.high-contrast h2,
+html.high-contrast h3,
+html.high-contrast h4,
+html.high-contrast h5,
+html.high-contrast h6,
+html.high-contrast p,
+html.high-contrast li,
+html.high-contrast span,
+html.high-contrast label,
+html.high-contrast td,
+html.high-contrast th {
+  color: #ffffff !important;
+}
+
+html.high-contrast a,
+html.high-contrast button,
+html.high-contrast select,
+html.high-contrast option,
+html.high-contrast input,
+html.high-contrast textarea {
+  color: #ffff00 !important;
+  border-color: #ffffff !important;
+}
+
+html.high-contrast input::placeholder,
+html.high-contrast textarea::placeholder {
+  color: #aaaaaa !important;
+}
+
+html.high-contrast svg {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+html.high-contrast .bg-brand-navy,
+html.high-contrast .bg-brand-green,
+html.high-contrast .bg-brand-blue,
+html.high-contrast .bg-brand-gold,
+html.high-contrast .bg-white {
+  background-color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
