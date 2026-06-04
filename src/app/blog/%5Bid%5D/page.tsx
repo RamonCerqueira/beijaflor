@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Calendar, ChevronLeft, BookOpen, Share2 } from "lucide-react";
 
-export const revalidate = 0; // Force dynamic rendering
+export const dynamic = "force-dynamic"; // Force dynamic rendering
 
 interface BlogPostPageProps {
   params: Promise<{ id: string }>;

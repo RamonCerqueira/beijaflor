@@ -3,7 +3,7 @@ import Image from "next/image";
 import { prisma } from "@/lib/db";
 import { Calendar, ArrowRight, BookOpen } from "lucide-react";
 
-export const revalidate = 0; // Fresh posts always
+export const dynamic = "force-dynamic"; // Fresh posts always
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({

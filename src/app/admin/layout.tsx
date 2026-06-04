@@ -4,7 +4,7 @@ import { logoutAdminAction } from "@/lib/actions";
 import { LogOut } from "lucide-react";
 import AdminShell from "@/components/AdminShell";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({
   children,

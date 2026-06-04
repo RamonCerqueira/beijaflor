@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { Wallet, Megaphone, ArrowRight } from "lucide-react";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const transactionsCount = await prisma.transaction.count();

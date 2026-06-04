@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import FinanceManagerClient from "./FinanceManagerClient";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminFinancePage() {
   const transactions = await prisma.transaction.findMany({

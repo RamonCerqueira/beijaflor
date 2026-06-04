@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import GalleryManagerClient from "@/components/GalleryManagerClient";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminGalleryPage() {
   const posts = await prisma.galleryPost.findMany({

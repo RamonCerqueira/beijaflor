@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve("."),
   },
+  serverExternalPackages: ["@prisma/client"],
 };
 
 export default nextConfig;

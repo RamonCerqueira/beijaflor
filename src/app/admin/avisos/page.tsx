@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import NoticesManagerClient from "@/components/NoticesManagerClient";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminNoticesPage() {
   const notices = await prisma.notice.findMany({

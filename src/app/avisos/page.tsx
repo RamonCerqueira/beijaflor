@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import NoticeCard from "@/components/NoticeCard";
 
-export const revalidate = 0; // Disable cache so data is fresh
+export const dynamic = "force-dynamic"; // Disable cache so data is fresh
 
 export default async function NoticesPage() {
   const notices = await prisma.notice.findMany({
