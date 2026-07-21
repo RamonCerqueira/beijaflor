@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockTransactions } from "@/lib/mockData";
 import FinanceSummaryCards from "@/components/FinanceSummaryCards";
 import FinanceCharts from "@/components/FinanceCharts";
 import TransactionTable from "@/components/TransactionTable";
@@ -13,11 +14,11 @@ export default async function TransparencyPage({
 }) {
   const params = await searchParams;
   
-  const allTransactions = await prisma.transaction.findMany({
-    orderBy: {
-      date: "desc",
-    },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const allTransactions = await prisma.transaction.findMany({
+  //   orderBy: { date: "desc" },
+  // });
+  const allTransactions = mockTransactions;
 
   // Extract unique month/years
   const monthMap = new Map<string, { month: number; year: number; label: string }>();

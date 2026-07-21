@@ -1,17 +1,16 @@
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockNotices } from "@/lib/mockData";
 import NoticeCard from "@/components/NoticeCard";
 
 export const dynamic = "force-dynamic"; // Disable cache so data is fresh
 
 export default async function NoticesPage() {
-  const notices = await prisma.notice.findMany({
-    where: {
-      active: true,
-    },
-    orderBy: {
-      date: "desc",
-    },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const notices = await prisma.notice.findMany({
+  //   where: { active: true },
+  //   orderBy: { date: "desc" },
+  // });
+  const notices = mockNotices.filter((n) => n.active);
 
   return (
     <div className="py-12 bg-slate-50 min-h-screen">

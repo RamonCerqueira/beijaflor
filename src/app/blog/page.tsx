@@ -1,19 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockBlogPosts } from "@/lib/mockData";
 import { Calendar, ArrowRight, BookOpen } from "lucide-react";
 
 export const dynamic = "force-dynamic"; // Fresh posts always
 
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      date: "desc",
-    },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const posts = await prisma.blogPost.findMany({
+  //   where: { published: true },
+  //   orderBy: { date: "desc" },
+  // });
+  const posts = mockBlogPosts.filter((p) => p.published);
 
   const formatDate = (dateVal: Date) => {
     return new Date(dateVal).toLocaleDateString("pt-BR", {

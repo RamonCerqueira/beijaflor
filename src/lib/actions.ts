@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { prisma } from "./db";
+// import { prisma } from "./db";
 import fs from "fs";
 import path from "path";
 import { setAdminSession, clearAdminSession, getAdminSession } from "./auth";
@@ -29,18 +29,18 @@ export async function loginAdminAction(prevState: any, formData: FormData) {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { username } });
-    if (!user) {
-      return { error: "Usuário ou senha incorretos" };
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!passwordMatch) {
-      return { error: "Usuário ou senha incorretos" };
-    }
+    // BANCO SUPABASE PAUSADO - Autenticação no banco comentada:
+    // const user = await prisma.user.findUnique({ where: { username } });
+    // if (!user) {
+    //   return { error: "Usuário ou senha incorretos" };
+    // }
+    // const passwordMatch = await bcrypt.compare(password, user.passwordHash);
+    // if (!passwordMatch) {
+    //   return { error: "Usuário ou senha incorretos" };
+    // }
 
     // Set JWT Session
-    await setAdminSession(user.username);
+    await setAdminSession(username);
   } catch (error) {
     console.error("Erro no login:", error);
     return { error: "Erro interno no servidor" };
@@ -67,15 +67,16 @@ export async function createTransactionAction(data: any) {
   const { description, amount, type, category, date } = validation.data;
 
   try {
-    await prisma.transaction.create({
-      data: {
-        description,
-        amount,
-        type,
-        category,
-        date: new Date(date),
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.transaction.create({
+    //   data: {
+    //     description,
+    //     amount,
+    //     type,
+    //     category,
+    //     date: new Date(date),
+    //   },
+    // });
     
     revalidatePath("/transparencia");
     revalidatePath("/admin/financeiro");
@@ -97,16 +98,17 @@ export async function updateTransactionAction(id: string, data: any) {
   const { description, amount, type, category, date } = validation.data;
 
   try {
-    await prisma.transaction.update({
-      where: { id },
-      data: {
-        description,
-        amount,
-        type,
-        category,
-        date: new Date(date),
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.transaction.update({
+    //   where: { id },
+    //   data: {
+    //     description,
+    //     amount,
+    //     type,
+    //     category,
+    //     date: new Date(date),
+    //   },
+    // });
 
     revalidatePath("/transparencia");
     revalidatePath("/admin/financeiro");
@@ -121,7 +123,8 @@ export async function deleteTransactionAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.transaction.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.transaction.delete({ where: { id } });
     
     revalidatePath("/transparencia");
     revalidatePath("/admin/financeiro");
@@ -144,23 +147,22 @@ export async function createNoticeAction(data: any) {
   const { title, content, category, date, active, showPopup } = validation.data;
 
   try {
-    // If setting this notice as a popup, clear showPopup on all other notices
-    if (showPopup) {
-      await prisma.notice.updateMany({
-        data: { showPopup: false },
-      });
-    }
-
-    await prisma.notice.create({
-      data: {
-        title,
-        content,
-        category,
-        date: new Date(date),
-        active,
-        showPopup,
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operações comentadas:
+    // if (showPopup) {
+    //   await prisma.notice.updateMany({
+    //     data: { showPopup: false },
+    //   });
+    // }
+    // await prisma.notice.create({
+    //   data: {
+    //     title,
+    //     content,
+    //     category,
+    //     date: new Date(date),
+    //     active,
+    //     showPopup,
+    //   },
+    // });
 
     revalidatePath("/");
     revalidatePath("/avisos");
@@ -176,10 +178,11 @@ export async function toggleNoticeAction(id: string, currentActive: boolean) {
   await requireAdmin();
 
   try {
-    await prisma.notice.update({
-      where: { id },
-      data: { active: !currentActive },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.notice.update({
+    //   where: { id },
+    //   data: { active: !currentActive },
+    // });
 
     revalidatePath("/");
     revalidatePath("/avisos");
@@ -197,17 +200,16 @@ export async function toggleNoticePopupAction(id: string, currentShowPopup: bool
   const newShowPopup = !currentShowPopup;
 
   try {
-    if (newShowPopup) {
-      // Clear all other popups
-      await prisma.notice.updateMany({
-        data: { showPopup: false },
-      });
-    }
-
-    await prisma.notice.update({
-      where: { id },
-      data: { showPopup: newShowPopup },
-    });
+    // BANCO SUPABASE PAUSADO - Operações comentadas:
+    // if (newShowPopup) {
+    //   await prisma.notice.updateMany({
+    //     data: { showPopup: false },
+    //   });
+    // }
+    // await prisma.notice.update({
+    //   where: { id },
+    //   data: { showPopup: newShowPopup },
+    // });
 
     revalidatePath("/");
     revalidatePath("/avisos");
@@ -223,7 +225,8 @@ export async function deleteNoticeAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.notice.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.notice.delete({ where: { id } });
 
     revalidatePath("/");
     revalidatePath("/avisos");
@@ -247,17 +250,18 @@ export async function createGalleryPostAction(data: any) {
   const { image, text, link, platform, likes, comments, date } = validation.data;
 
   try {
-    await prisma.galleryPost.create({
-      data: {
-        image,
-        text,
-        link: link || null,
-        platform,
-        likes,
-        comments,
-        date: new Date(date),
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.galleryPost.create({
+    //   data: {
+    //     image,
+    //     text,
+    //     link: link || null,
+    //     platform,
+    //     likes,
+    //     comments,
+    //     date: new Date(date),
+    //   },
+    // });
 
     revalidatePath("/");
     revalidatePath("/admin/galeria");
@@ -272,7 +276,8 @@ export async function deleteGalleryPostAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.galleryPost.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.galleryPost.delete({ where: { id } });
 
     revalidatePath("/");
     revalidatePath("/admin/galeria");
@@ -295,17 +300,18 @@ export async function createBlogPostAction(data: any) {
   const { title, excerpt, content, image, category, published, date } = validation.data;
 
   try {
-    await prisma.blogPost.create({
-      data: {
-        title,
-        excerpt,
-        content,
-        image,
-        category,
-        published,
-        date: new Date(date),
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.blogPost.create({
+    //   data: {
+    //     title,
+    //     excerpt,
+    //     content,
+    //     image,
+    //     category,
+    //     published,
+    //     date: new Date(date),
+    //   },
+    // });
 
     revalidatePath("/blog");
     revalidatePath("/admin/blog");
@@ -321,7 +327,8 @@ export async function deleteBlogPostAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.blogPost.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.blogPost.delete({ where: { id } });
 
     revalidatePath("/blog");
     revalidatePath("/admin/blog");
@@ -337,10 +344,11 @@ export async function toggleBlogPostPublishAction(id: string, currentPublished: 
   await requireAdmin();
 
   try {
-    await prisma.blogPost.update({
-      where: { id },
-      data: { published: !currentPublished },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.blogPost.update({
+    //   where: { id },
+    //   data: { published: !currentPublished },
+    // });
 
     revalidatePath("/blog");
     revalidatePath(`/blog/${id}`);
@@ -365,14 +373,15 @@ export async function createFaqItemAction(data: any) {
   const { question, answer, order, active } = validation.data;
 
   try {
-    await prisma.faqItem.create({
-      data: {
-        question,
-        answer,
-        order,
-        active,
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.faqItem.create({
+    //   data: {
+    //     question,
+    //     answer,
+    //     order,
+    //     active,
+    //   },
+    // });
 
     revalidatePath("/");
     revalidatePath("/admin/faq");
@@ -394,15 +403,16 @@ export async function updateFaqItemAction(id: string, data: any) {
   const { question, answer, order, active } = validation.data;
 
   try {
-    await prisma.faqItem.update({
-      where: { id },
-      data: {
-        question,
-        answer,
-        order,
-        active,
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.faqItem.update({
+    //   where: { id },
+    //   data: {
+    //     question,
+    //     answer,
+    //     order,
+    //     active,
+    //   },
+    // });
 
     revalidatePath("/");
     revalidatePath("/admin/faq");
@@ -417,7 +427,8 @@ export async function deleteFaqItemAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.faqItem.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.faqItem.delete({ where: { id } });
 
     revalidatePath("/");
     revalidatePath("/admin/faq");
@@ -438,16 +449,17 @@ export async function createVolunteerCandidateAction(data: any) {
   const { name, email, phone, area, message } = validation.data;
 
   try {
-    await prisma.volunteerCandidate.create({
-      data: {
-        name,
-        email,
-        phone,
-        area,
-        message,
-        status: "PENDING",
-      },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.volunteerCandidate.create({
+    //   data: {
+    //     name,
+    //     email,
+    //     phone,
+    //     area,
+    //     message,
+    //     status: "PENDING",
+    //   },
+    // });
 
     revalidatePath("/admin/voluntarios");
     return { success: true };
@@ -465,10 +477,11 @@ export async function updateVolunteerCandidateStatusAction(id: string, status: s
   }
 
   try {
-    await prisma.volunteerCandidate.update({
-      where: { id },
-      data: { status },
-    });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.volunteerCandidate.update({
+    //   where: { id },
+    //   data: { status },
+    // });
 
     revalidatePath("/admin/voluntarios");
     return { success: true };
@@ -482,7 +495,8 @@ export async function deleteVolunteerCandidateAction(id: string) {
   await requireAdmin();
 
   try {
-    await prisma.volunteerCandidate.delete({ where: { id } });
+    // BANCO SUPABASE PAUSADO - Operação comentada:
+    // await prisma.volunteerCandidate.delete({ where: { id } });
 
     revalidatePath("/admin/voluntarios");
     return { success: true };
@@ -502,20 +516,20 @@ export async function updateFinancialGoalAction(month: number, year: number, tar
   }
 
   try {
-    const existing = await prisma.financialGoal.findFirst({
-      where: { month, year },
-    });
-
-    if (existing) {
-      await prisma.financialGoal.update({
-        where: { id: existing.id },
-        data: { target, current },
-      });
-    } else {
-      await prisma.financialGoal.create({
-        data: { month, year, target, current },
-      });
-    }
+    // BANCO SUPABASE PAUSADO - Operações comentadas:
+    // const existing = await prisma.financialGoal.findFirst({
+    //   where: { month, year },
+    // });
+    // if (existing) {
+    //   await prisma.financialGoal.update({
+    //     where: { id: existing.id },
+    //     data: { target, current },
+    //   });
+    // } else {
+    //   await prisma.financialGoal.create({
+    //     data: { month, year, target, current },
+    //   });
+    // }
 
     revalidatePath("/");
     revalidatePath("/admin/financeiro");

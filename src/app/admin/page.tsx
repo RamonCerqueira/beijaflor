@@ -1,17 +1,22 @@
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockTransactions, mockNotices } from "@/lib/mockData";
 import Link from "next/link";
 import { Wallet, Megaphone, ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const transactionsCount = await prisma.transaction.count();
-  const noticesCount = await prisma.notice.count({ where: { active: true } });
+  // BANCO SUPABASE PAUSADO - Consultas originais comentadas:
+  // const transactionsCount = await prisma.transaction.count();
+  // const noticesCount = await prisma.notice.count({ where: { active: true } });
+  // const transactions = await prisma.transaction.findMany({
+  //   orderBy: { date: "desc" },
+  //   take: 3,
+  // });
 
-  const transactions = await prisma.transaction.findMany({
-    orderBy: { date: "desc" },
-    take: 3,
-  });
+  const transactionsCount = mockTransactions.length;
+  const noticesCount = mockNotices.filter((n) => n.active).length;
+  const transactions = mockTransactions.slice(0, 3);
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat("pt-BR", {

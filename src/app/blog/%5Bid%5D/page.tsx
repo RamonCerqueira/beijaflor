@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockBlogPosts } from "@/lib/mockData";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,9 +21,11 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
-  const post = await prisma.blogPost.findUnique({
-    where: { id },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const post = await prisma.blogPost.findUnique({
+  //   where: { id },
+  // });
+  const post = mockBlogPosts.find((p) => p.id === id) || mockBlogPosts[0];
 
   if (!post) {
     return {
@@ -60,9 +63,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const post = await prisma.blogPost.findUnique({
-    where: { id },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const post = await prisma.blogPost.findUnique({
+  //   where: { id },
+  // });
+  const post = mockBlogPosts.find((p) => p.id === id) || mockBlogPosts[0];
 
   if (!post || !post.published) {
     notFound();

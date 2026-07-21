@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/db";
+// import { prisma } from "@/lib/db";
+import { mockTransactions } from "@/lib/mockData";
 import { notFound } from "next/navigation";
 import EditTransactionForm from "./EditTransactionForm";
 
@@ -9,9 +10,11 @@ interface EditarLancamentoPageProps {
 export default async function EditarLancamentoPage({ params }: EditarLancamentoPageProps) {
   const { id } = await params;
   
-  const transaction = await prisma.transaction.findUnique({
-    where: { id },
-  });
+  // BANCO SUPABASE PAUSADO - Consulta original comentada:
+  // const transaction = await prisma.transaction.findUnique({
+  //   where: { id },
+  // });
+  const transaction = mockTransactions.find((t) => t.id === id) || mockTransactions[0];
 
   if (!transaction) {
     notFound();
